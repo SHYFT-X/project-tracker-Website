@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
   <header class="site-header" id="site-header">
@@ -66,22 +66,20 @@
             <div class="review-body">
               <div class="review-video">
                 <div class="review-frame">
-                  <svg class="review-frame-art" viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-                    <rect width="400" height="220" fill="url(#skyGrad)"/>
-                    <circle cx="205" cy="112" r="30" fill="#fde68a" opacity=".9"/>
-                    <path d="M0 168h400v52H0z" fill="#1c2333"/>
-                    <path d="M40 168V96h34l14-12h60l10 12h40v72z" fill="#2a3350"/>
-                    <path d="M62 168v-56h50v56" fill="#0f1420" opacity=".5"/>
-                    <path d="M260 168V120h70v48z" fill="#242c47"/>
-                    <path d="M300 168V80h40v88z" fill="#2a3350"/>
-                    <defs>
-                      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#3730a3"/>
-                        <stop offset=".55" stop-color="#c2410c"/>
-                        <stop offset="1" stop-color="#fb923c"/>
-                      </linearGradient>
-                    </defs>
-                  </svg>
+                  <video
+                    class="review-frame-video"
+                    id="mockVideo"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                    aria-hidden="true"
+                  >
+                    <source src="https://assets.mixkit.co/videos/27543/27543-720.mp4" type="video/mp4" />
+                  </video>
+                  <div class="review-frame-overlay" aria-hidden="true"></div>
+                  <span class="review-frame-badge" aria-hidden="true">HD</span>
                 </div>
                 <div class="review-video-controls">
                   <div class="review-scrubber">
@@ -524,6 +522,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>

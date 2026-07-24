@@ -68,11 +68,20 @@ if (revealEls.length) {
 // Play/pause toggle for the hero demo mockup
 const mockWindow = document.getElementById('mockWindow');
 const mockPlayToggle = document.getElementById('mockPlayToggle');
+const mockVideo = document.getElementById('mockVideo');
+const prefersReducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+if (mockVideo && prefersReducedMotionQuery.matches) {
+  mockVideo.pause();
+}
 if (mockWindow && mockPlayToggle) {
   mockPlayToggle.addEventListener('click', () => {
     const isPaused = mockWindow.classList.toggle('paused');
     mockPlayToggle.classList.toggle('is-paused', isPaused);
     mockPlayToggle.setAttribute('aria-label', isPaused ? 'Play demo' : 'Pause demo');
+    if (mockVideo) {
+      if (isPaused) mockVideo.pause();
+      else mockVideo.play().catch(() => {});
+    }
   });
 }
 
