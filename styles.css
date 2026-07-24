@@ -241,9 +241,9 @@ section h2.center { margin-left: auto; margin-right: auto; }
   align-items: center;
   justify-content: center;
 }
-.review-body { display: grid; grid-template-columns: 1.6fr 1fr; }
-.review-video { position: relative; display: flex; flex-direction: column; }
-.review-frame { position: relative; aspect-ratio: 4/2.7; overflow: hidden; background: #000; }
+.review-body { display: grid; grid-template-columns: 1.6fr 1fr; align-items: stretch; }
+.review-video { position: relative; display: flex; flex-direction: column; height: 100%; }
+.review-frame { position: relative; aspect-ratio: 16/9; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #000; }
 .review-frame-video {
   width: 100%;
   height: 100%;
@@ -367,12 +367,17 @@ section h2.center { margin-left: auto; margin-right: auto; }
   margin-bottom: .65rem;
   display: flex;
   align-items: flex-start;
+  overflow: hidden;
 }
 .review-input-placeholder {
   position: absolute;
   left: .7rem;
+  right: .7rem;
   top: .6rem;
   color: var(--rw-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   animation: reviewPlaceholderFade 8s ease infinite;
 }
 .review-input-typed {
@@ -383,19 +388,20 @@ section h2.center { margin-left: auto; margin-right: auto; }
   overflow: hidden;
   white-space: nowrap;
   width: 0;
-  max-width: 224px;
+  max-width: calc(100% - 1.4rem);
   border-right: 2px solid var(--accent);
   color: var(--rw-text);
   animation: reviewTyping 8s ease infinite, caretBlink .9s steps(1) infinite;
 }
 .review-post {
+  width: 100%;
   border: 0;
   border-radius: 10px;
   background: var(--accent-grad);
   color: #fff;
   font-weight: 700;
   font-size: .82rem;
-  padding: .6rem .8rem;
+  padding: .7rem .8rem;
   cursor: default;
   position: relative;
   overflow: hidden;
@@ -414,6 +420,8 @@ section h2.center { margin-left: auto; margin-right: auto; }
 .review-comments { position: relative; flex: 1; }
 .review-empty {
   margin: 0;
+  padding: .5rem 0;
+  text-align: center;
   font-size: .8rem;
   color: var(--rw-text-muted);
   animation: reviewEmptyFade 8s ease infinite;
@@ -469,8 +477,8 @@ section h2.center { margin-left: auto; margin-right: auto; }
 @keyframes reviewTyping {
   0%        { width: 0; }
   15%       { width: 0; animation-timing-function: steps(24, end); }
-  40%       { width: 224px; }
-  48%       { width: 224px; }
+  40%       { width: calc(100% - 1.4rem); }
+  48%       { width: calc(100% - 1.4rem); }
   50%, 100% { width: 0; }
 }
 @keyframes caretBlink { 50% { border-color: transparent; } }
