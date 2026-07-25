@@ -145,6 +145,108 @@ countEls.forEach(el => {
   }, 1150);
 });
 
+// How it works — interactive tabbed video showcase
+const hiwSteps = document.querySelectorAll('.hiw-step');
+const hiwVideo = document.getElementById('hiwVideo');
+const hiwVideoSource = document.getElementById('hiwVideoSource');
+const hiwVideoWrap = hiwVideo ? hiwVideo.closest('.hiw-video-wrap') : null;
+const hiwFrameLabel = document.getElementById('hiwFrameLabel');
+const hiwPlayBtn = document.getElementById('hiwPlayBtn');
+const hiwPlayOverlay = document.getElementById('hiwPlayOverlay');
+const hiwProgressFill = document.getElementById('hiwProgressFill');
+const hiwTime = document.getElementById('hiwTime');
+const hiwFullscreenBtn = document.getElementById('hiwFullscreenBtn');
+
+if (hiwSteps.length && hiwVideo) {
+  const AUTO_ROTATE_MS = 6000;
+  const SWITCH_ANIM_MS = 350;
+  let activeIndex = 0;
+  let autoRotateTimer = null;
+  let isPaused = prefersReducedMotionQuery.matches;
+
+  const hiwFormatTime = seconds => {
+    if (!Number.isFinite(seconds)) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
+
+  function setPausedState(paused) {
+    isPaused = paused;
+    if (paused) hiwVideo.pause();
+    else hiwVideo.play().catch(() => {});
+    [hiwPlayBtn, hiwPlayOverlay].forEach(btn => {
+      if (!btn) return;
+      btn.classList.toggle('is-paused', paused);
+      btn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+    });
+  }
+
+  function restartAutoRotate() {
+    if (autoRotateTimer) clearInterval(autoRotateTimer);
+    if (prefersReducedMotionQuery.matches) return;
+    autoRotateTimer = setInterval(() => {
+      setActiveStep((activeIndex + 1) % hiwSteps.length);
+    }, AUTO_ROTATE_MS);
+  }
+
+  function setActiveStep(index, opts = {}) {
+    const changed = index !== activeIndex;
+    activeIndex = index;
+    const step = hiwSteps[index];
+
+    hiwSteps.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+      s.setAttribute('aria-selected', String(i === index));
+    });
+
+    if (hiwFrameLabel) hiwFrameLabel.textContent = step.dataset.label || '';
+
+    const nextSrc = step.dataset.video;
+    const swapSource = nextSrc && hiwVideoSource.getAttribute('src') !== nextSrc;
+
+    if (changed && hiwVideoWrap) {
+      hiwVideoWrap.classList.add('is-switching');
+      setTimeout(() => hiwVideoWrap.classList.remove('is-switching'), SWITCH_ANIM_MS);
+    }
+
+    if (swapSource) {
+      hiwVideoSource.setAttribute('src', nextSrc);
+      hiwVideo.load();
+    }
+    if (!isPaused) hiwVideo.play().catch(() => {});
+
+    if (opts.userInitiated) restartAutoRotate();
+  }
+
+  hiwSteps.forEach((step, i) => {
+    step.addEventListener('click', () => setActiveStep(i, { userInitiated: true }));
+  });
+
+  if (hiwPlayBtn) hiwPlayBtn.addEventListener('click', () => setPausedState(!isPaused));
+  if (hiwPlayOverlay) hiwPlayOverlay.addEventListener('click', () => setPausedState(!isPaused));
+
+  if (hiwFullscreenBtn) {
+    hiwFullscreenBtn.addEventListener('click', () => {
+      const target = hiwVideoWrap || hiwVideo;
+      if (target.requestFullscreen) target.requestFullscreen();
+      else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+    });
+  }
+
+  hiwVideo.addEventListener('timeupdate', () => {
+    if (!hiwVideo.duration || !hiwProgressFill || !hiwTime) return;
+    hiwProgressFill.style.width = `${(hiwVideo.currentTime / hiwVideo.duration) * 100}%`;
+    hiwTime.textContent = `${hiwFormatTime(hiwVideo.currentTime)} / ${hiwFormatTime(hiwVideo.duration)}`;
+  });
+  hiwVideo.addEventListener('loadedmetadata', () => {
+    if (hiwTime) hiwTime.textContent = `0:00 / ${hiwFormatTime(hiwVideo.duration)}`;
+  });
+
+  if (isPaused) setPausedState(true);
+  restartAutoRotate();
+}
+
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 if (contactForm) {

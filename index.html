@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <header class="site-header" id="site-header">
@@ -337,47 +337,102 @@
       </div>
     </section>
 
-    <section id="workflow" class="section">
+    <section id="workflow" class="section how-it-works">
       <div class="container">
-        <p class="eyebrow center">End-to-end workflow</p>
-        <h2 class="center">From brief to approval</h2>
-        <ol class="timeline reveal">
-          <li>
-            <span class="timeline-num">1</span>
-            <div class="timeline-body">
-              <h3>Submit Request</h3>
-              <p>A user creates a request specifying deliverable type, priority, and due date.</p>
+        <span class="hiw-badge center">How it works</span>
+        <h2 class="center">See Project Tracker in action in 4 simple steps</h2>
+        <p class="section-lead center">Streamline your creative reviews, video proofing, and client approvals.</p>
+
+        <div class="hiw-grid reveal">
+          <div class="hiw-steps" role="tablist" aria-label="How Project Tracker works">
+            <button type="button" class="hiw-step active" role="tab" aria-selected="true" aria-controls="hiwPanel" id="hiwTab-0"
+              data-video="https://assets.mixkit.co/videos/27543/27543-720.mp4" data-label="Upload &amp; Organize">
+              <span class="hiw-step-bar" aria-hidden="true"></span>
+              <span class="hiw-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 15V4M12 4l-4 4M12 4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="hiw-step-body">
+                <span class="hiw-step-num">Step 1</span>
+                <span class="hiw-step-title">Upload &amp; Organize</span>
+                <span class="hiw-step-desc">Upload video assets and organize them by project and folder.</span>
+              </span>
+            </button>
+            <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-1"
+              data-video="https://assets.mixkit.co/videos/27543/27543-720.mp4" data-label="Pinpoint Video Feedback">
+              <span class="hiw-step-bar" aria-hidden="true"></span>
+              <span class="hiw-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </span>
+              <span class="hiw-step-body">
+                <span class="hiw-step-num">Step 2</span>
+                <span class="hiw-step-title">Pinpoint Video Feedback</span>
+                <span class="hiw-step-desc">Click directly on video timestamps to add precise comments.</span>
+              </span>
+            </button>
+            <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-2"
+              data-video="https://assets.mixkit.co/videos/27543/27543-720.mp4" data-label="1-Click Client Approval">
+              <span class="hiw-step-bar" aria-hidden="true"></span>
+              <span class="hiw-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg>
+              </span>
+              <span class="hiw-step-body">
+                <span class="hiw-step-num">Step 3</span>
+                <span class="hiw-step-title">1-Click Client Approval</span>
+                <span class="hiw-step-desc">Clients review and approve or request changes instantly.</span>
+              </span>
+            </button>
+            <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-3"
+              data-video="https://assets.mixkit.co/videos/27543/27543-720.mp4" data-label="Real-Time Team Sync">
+              <span class="hiw-step-bar" aria-hidden="true"></span>
+              <span class="hiw-step-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 4v4h-4M6 20v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="hiw-step-body">
+                <span class="hiw-step-num">Step 4</span>
+                <span class="hiw-step-title">Real-Time Team Sync</span>
+                <span class="hiw-step-desc">Keep everyone updated with automated audit trails and versioning.</span>
+              </span>
+            </button>
+          </div>
+
+          <div class="hiw-showcase">
+            <div class="hiw-frame" id="hiwPanel" role="tabpanel" aria-live="polite">
+              <div class="hiw-frame-topbar">
+                <span class="hiw-frame-dots" aria-hidden="true">
+                  <span class="hiw-dot dot-red"></span>
+                  <span class="hiw-dot dot-yellow"></span>
+                  <span class="hiw-dot dot-green"></span>
+                </span>
+                <span class="hiw-frame-label" id="hiwFrameLabel">Upload &amp; Organize</span>
+              </div>
+              <div class="hiw-video-wrap">
+                <video class="hiw-video" id="hiwVideo" muted loop playsinline preload="auto" aria-hidden="true">
+                  <source id="hiwVideoSource" src="https://assets.mixkit.co/videos/27543/27543-720.mp4" type="video/mp4">
+                </video>
+                <button type="button" class="hiw-play-overlay" id="hiwPlayOverlay" aria-label="Pause video">
+                  <svg class="icon-pause" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>
+                  <svg class="icon-play" viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M7 5v14l12-7z" fill="currentColor"/></svg>
+                </button>
+              </div>
+              <div class="hiw-controls">
+                <div class="hiw-progress" id="hiwProgress">
+                  <div class="hiw-progress-fill" id="hiwProgressFill"></div>
+                </div>
+                <div class="hiw-controls-row">
+                  <button type="button" class="hiw-ctrl" id="hiwPlayBtn" aria-label="Pause video">
+                    <svg class="icon-pause" viewBox="0 0 24 24" fill="none" width="14" height="14"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>
+                    <svg class="icon-play" viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M7 5v14l12-7z" fill="currentColor"/></svg>
+                  </button>
+                  <span class="hiw-time" id="hiwTime">0:00 / 0:00</span>
+                  <span class="hiw-spacer"></span>
+                  <button type="button" class="hiw-ctrl" id="hiwFullscreenBtn" aria-label="Full screen">
+                    <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>
+              </div>
             </div>
-          </li>
-          <li>
-            <span class="timeline-num">2</span>
-            <div class="timeline-body">
-              <h3>Upload Initial Draft</h3>
-              <p>The design team uploads v1.0 for review.</p>
-            </div>
-          </li>
-          <li>
-            <span class="timeline-num">3</span>
-            <div class="timeline-body">
-              <h3>Drop Visual Feedback</h3>
-              <p>The client or reviewer clicks on the proofing canvas to drop numbered pins with revision requests.</p>
-            </div>
-          </li>
-          <li>
-            <span class="timeline-num">4</span>
-            <div class="timeline-body">
-              <h3>Upload Iteration</h3>
-              <p>The team updates the design and uploads v2.0.</p>
-            </div>
-          </li>
-          <li>
-            <span class="timeline-num">5</span>
-            <div class="timeline-body">
-              <h3>Compare &amp; Approve</h3>
-              <p>The client compares v1.0 vs v2.0 side-by-side and marks the version Approved.</p>
-            </div>
-          </li>
-        </ol>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -521,6 +576,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>
