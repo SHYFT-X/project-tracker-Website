@@ -1,4 +1,4 @@
-// Simple interactivity: mobile nav toggle, page-style section routing, demo contact handler
+// Simple interactivity: mobile nav toggle, in-page smooth-scroll nav, demo contact handler
 const navToggle = document.getElementById('nav-toggle');
 const navList = document.getElementById('nav-list');
 if (navToggle && navList) {
@@ -8,30 +8,17 @@ if (navToggle && navList) {
   });
 }
 
-const PAGES = ['home', 'architecture', 'features', 'workflow', 'roles', 'contact'];
-
-function showPage(id) {
-  if (!PAGES.includes(id)) id = 'home';
-
-  document.querySelectorAll('main > section').forEach(section => {
-    const isMatch = section.id === id || (section.classList.contains('cta-banner') && id === 'contact');
-    section.hidden = !isMatch;
-  });
-
-  document.querySelectorAll('.nav-list a').forEach(link => {
-    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-  });
-
-  window.scrollTo(0, 0);
-}
+// Single continuously-scrolling page — nav links scroll to their section
+// without ever writing a #hash into the address bar.
+const SECTION_IDS = ['home', 'architecture', 'features', 'workflow', 'roles', 'contact'];
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
     const id = link.getAttribute('href').slice(1);
-    if (!PAGES.includes(id)) return;
+    const target = document.getElementById(id);
+    if (!target) return;
     e.preventDefault();
-    history.pushState(null, '', '#' + id);
-    showPage(id);
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     if (navList && navList.classList.contains('open')) {
       navList.classList.remove('open');
@@ -40,8 +27,39 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
-window.addEventListener('hashchange', () => showPage(location.hash.slice(1)));
-showPage(location.hash.slice(1) || 'home');
+// A link shared with a #hash (or a leftover one from before this site used
+// clean URLs) should still land on the right section, then get scrubbed.
+// The hashchange listener catches it reappearing later too — e.g. someone
+// typing a #hash straight into the address bar on an already-loaded page.
+function stripHash() {
+  if (!location.hash) return;
+  history.replaceState(null, '', location.pathname + location.search);
+}
+if (location.hash) {
+  const target = document.getElementById(location.hash.slice(1));
+  if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+  stripHash();
+}
+window.addEventListener('hashchange', stripHash);
+
+// Scroll-spy: highlight the nav link for whichever section is in view
+const navLinksById = {};
+document.querySelectorAll('.nav-list a[href^="#"]').forEach(link => {
+  navLinksById[link.getAttribute('href').slice(1)] = link;
+});
+const spySections = SECTION_IDS.map(id => document.getElementById(id)).filter(Boolean);
+if (spySections.length) {
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const link = navLinksById[entry.target.id];
+      if (!link) return;
+      Object.values(navLinksById).forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  spySections.forEach(section => spyObserver.observe(section));
+}
 
 // Header shadow once the page has scrolled
 const siteHeader = document.getElementById('site-header');
