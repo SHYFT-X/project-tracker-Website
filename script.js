@@ -147,12 +147,11 @@ countEls.forEach(el => {
 
 // How it works — interactive tabbed product walkthrough
 const hiwSteps = document.querySelectorAll('.hiw-step');
+const hiwScenes = document.querySelectorAll('.hiw-scene');
 const hiwFrame = document.getElementById('hiwPanel');
 const hiwFrameLabel = document.getElementById('hiwFrameLabel');
 const hiwStepCaption = document.getElementById('hiwStepCaption');
 const hiwStorySegs = document.querySelectorAll('.hiw-story-seg');
-const hiwVideo = document.getElementById('hiwVideo');
-const hiwVideoSource = document.getElementById('hiwVideoSource');
 const hiwPlayBtn = document.getElementById('hiwPlayBtn');
 const hiwPlayOverlay = document.getElementById('hiwPlayOverlay');
 const hiwExpandBtn = document.getElementById('hiwExpandBtn');
@@ -162,49 +161,24 @@ const hiwModalLabel = document.getElementById('hiwModalLabel');
 const hiwModalClose = document.getElementById('hiwModalClose');
 const hiwModalBackdrop = document.getElementById('hiwModalBackdrop');
 
-if (hiwSteps.length && hiwVideo) {
+if (hiwSteps.length && hiwScenes.length) {
   const AUTO_ROTATE_MS = 6000;
   let activeIndex = 0;
   let autoRotateTimer = null;
   let isPaused = prefersReducedMotionQuery.matches;
   let lastFocused = null;
 
-  // Every step points at a real clip path (videos/stepN-*.mp4). Browsers don't
-  // reliably fire `error` when a lone <source> 404s, so resolve availability
-  // with a HEAD request up front and fall back to the shared placeholder clip
-  // when the real file hasn't been dropped into the repo yet. Once real files
-  // are added, the HEAD check starts succeeding and no code change is needed.
-  const hiwVideoSrcCache = new Map();
-  async function resolveVideoSrc(primary, fallback) {
-    if (hiwVideoSrcCache.has(primary)) return hiwVideoSrcCache.get(primary);
-    let resolved = primary;
-    try {
-      const res = await fetch(primary, { method: 'HEAD' });
-      if (!res.ok) resolved = fallback || primary;
-    } catch {
-      resolved = fallback || primary;
-    }
-    hiwVideoSrcCache.set(primary, resolved);
-    return resolved;
-  }
-
-  async function loadStepVideo(step) {
-    const primary = step.dataset.video;
-    const fallback = step.dataset.videoFallback || '';
-    const requestedFor = step;
-    const src = await resolveVideoSrc(primary, fallback);
-    // Bail if the user already moved to a different step while the check was in flight.
-    if (hiwSteps[activeIndex] !== requestedFor) return;
-    hiwVideoSource.setAttribute('src', src);
-    hiwVideo.load();
-    if (!isPaused) hiwVideo.play().catch(() => {});
+  function scenePlayState(scene, paused) {
+    const video = scene.querySelector('video');
+    if (!video) return;
+    if (paused) video.pause();
+    else video.play().catch(() => {});
   }
 
   function setPausedState(paused) {
     isPaused = paused;
     if (hiwFrame) hiwFrame.classList.toggle('paused', paused);
-    if (paused) hiwVideo.pause();
-    else hiwVideo.play().catch(() => {});
+    hiwScenes.forEach(scene => scenePlayState(scene, paused));
     [hiwPlayBtn, hiwPlayOverlay].forEach(btn => {
       if (!btn) return;
       btn.classList.toggle('is-paused', paused);
@@ -246,11 +220,15 @@ if (hiwSteps.length && hiwVideo) {
       s.classList.toggle('active', i === index);
       s.setAttribute('aria-selected', String(i === index));
     });
+    hiwScenes.forEach((scene, i) => {
+      const isActive = i === index;
+      scene.classList.toggle('active', isActive);
+      scenePlayState(scene, isActive ? isPaused : true);
+    });
 
     if (hiwFrameLabel) hiwFrameLabel.textContent = step.dataset.label || '';
     if (hiwStepCaption) hiwStepCaption.textContent = `Step ${index + 1} of ${hiwSteps.length}`;
     updateStoryBar(index);
-    loadStepVideo(step);
 
     if (hiwModal && !hiwModal.hidden) syncModalContent();
     if (opts.userInitiated) restartAutoRotate();
@@ -269,20 +247,11 @@ if (hiwSteps.length && hiwVideo) {
   function syncModalContent() {
     if (!hiwModalStage) return;
     hiwModalStage.innerHTML = '';
-    const step = hiwSteps[activeIndex];
-    const modalVideo = document.createElement('video');
-    modalVideo.className = 'hiw-video';
-    modalVideo.muted = true;
-    modalVideo.loop = true;
-    modalVideo.playsInline = true;
-    modalVideo.setAttribute('aria-hidden', 'true');
-    const source = document.createElement('source');
-    source.src = hiwVideoSource.getAttribute('src');
-    source.type = 'video/mp4';
-    modalVideo.appendChild(source);
-    hiwModalStage.appendChild(modalVideo);
-    if (!isPaused) modalVideo.play().catch(() => {});
-    if (hiwModalLabel) hiwModalLabel.textContent = step.dataset.label || '';
+    const clone = hiwScenes[activeIndex].cloneNode(true);
+    clone.classList.add('active');
+    hiwModalStage.appendChild(clone);
+    if (!isPaused) scenePlayState(clone, false);
+    if (hiwModalLabel) hiwModalLabel.textContent = hiwSteps[activeIndex].dataset.label || '';
   }
 
   function onModalKeydown(e) {
@@ -293,6 +262,7 @@ if (hiwSteps.length && hiwVideo) {
     if (!hiwModal) return;
     lastFocused = document.activeElement;
     syncModalContent();
+    hiwModal.classList.toggle('is-paused', isPaused);
     hiwModal.hidden = false;
     document.body.classList.add('hiw-modal-open');
     if (autoRotateTimer) clearInterval(autoRotateTimer);
