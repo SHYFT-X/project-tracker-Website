@@ -145,53 +145,74 @@ countEls.forEach(el => {
   }, 1150);
 });
 
-// How it works — interactive tabbed video showcase
+// How it works — interactive tabbed product walkthrough
 const hiwSteps = document.querySelectorAll('.hiw-step');
-const hiwVideo = document.getElementById('hiwVideo');
-const hiwVideoSource = document.getElementById('hiwVideoSource');
-const hiwVideoWrap = hiwVideo ? hiwVideo.closest('.hiw-video-wrap') : null;
+const hiwScenes = document.querySelectorAll('.hiw-scene');
+const hiwFrame = document.getElementById('hiwPanel');
 const hiwFrameLabel = document.getElementById('hiwFrameLabel');
+const hiwStepCaption = document.getElementById('hiwStepCaption');
+const hiwStorySegs = document.querySelectorAll('.hiw-story-seg');
 const hiwPlayBtn = document.getElementById('hiwPlayBtn');
 const hiwPlayOverlay = document.getElementById('hiwPlayOverlay');
-const hiwProgressFill = document.getElementById('hiwProgressFill');
-const hiwTime = document.getElementById('hiwTime');
-const hiwFullscreenBtn = document.getElementById('hiwFullscreenBtn');
+const hiwExpandBtn = document.getElementById('hiwExpandBtn');
+const hiwModal = document.getElementById('hiwModal');
+const hiwModalStage = document.getElementById('hiwModalStage');
+const hiwModalLabel = document.getElementById('hiwModalLabel');
+const hiwModalClose = document.getElementById('hiwModalClose');
+const hiwModalBackdrop = document.getElementById('hiwModalBackdrop');
 
-if (hiwSteps.length && hiwVideo) {
+if (hiwSteps.length && hiwScenes.length) {
   const AUTO_ROTATE_MS = 6000;
-  const SWITCH_ANIM_MS = 350;
   let activeIndex = 0;
   let autoRotateTimer = null;
   let isPaused = prefersReducedMotionQuery.matches;
+  let lastFocused = null;
 
-  const hiwFormatTime = seconds => {
-    if (!Number.isFinite(seconds)) return '0:00';
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${String(s).padStart(2, '0')}`;
-  };
+  function scenePlayState(scene, paused) {
+    const video = scene.querySelector('video');
+    if (!video) return;
+    if (paused) video.pause();
+    else video.play().catch(() => {});
+  }
 
   function setPausedState(paused) {
     isPaused = paused;
-    if (paused) hiwVideo.pause();
-    else hiwVideo.play().catch(() => {});
+    if (hiwFrame) hiwFrame.classList.toggle('paused', paused);
+    hiwScenes.forEach(scene => scenePlayState(scene, paused));
     [hiwPlayBtn, hiwPlayOverlay].forEach(btn => {
       if (!btn) return;
       btn.classList.toggle('is-paused', paused);
-      btn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+      btn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
     });
+    if (paused) {
+      if (autoRotateTimer) clearInterval(autoRotateTimer);
+    } else {
+      restartAutoRotate();
+    }
   }
 
   function restartAutoRotate() {
     if (autoRotateTimer) clearInterval(autoRotateTimer);
-    if (prefersReducedMotionQuery.matches) return;
+    if (prefersReducedMotionQuery.matches || isPaused) return;
     autoRotateTimer = setInterval(() => {
-      setActiveStep((activeIndex + 1) % hiwSteps.length);
+      setActiveStep((activeIndex + 1) % hiwSteps.length, { userInitiated: false });
     }, AUTO_ROTATE_MS);
   }
 
+  function updateStoryBar(index) {
+    hiwStorySegs.forEach((seg, i) => {
+      seg.classList.remove('active', 'done');
+      if (i < index) seg.classList.add('done');
+    });
+    const activeSeg = hiwStorySegs[index];
+    if (!activeSeg) return;
+    // Force a reflow so the fill animation restarts from 0% every time.
+    activeSeg.classList.remove('active');
+    void activeSeg.offsetWidth;
+    activeSeg.classList.add('active');
+  }
+
   function setActiveStep(index, opts = {}) {
-    const changed = index !== activeIndex;
     activeIndex = index;
     const step = hiwSteps[index];
 
@@ -199,52 +220,73 @@ if (hiwSteps.length && hiwVideo) {
       s.classList.toggle('active', i === index);
       s.setAttribute('aria-selected', String(i === index));
     });
+    hiwScenes.forEach((scene, i) => {
+      const isActive = i === index;
+      scene.classList.toggle('active', isActive);
+      scenePlayState(scene, isActive ? isPaused : true);
+    });
 
     if (hiwFrameLabel) hiwFrameLabel.textContent = step.dataset.label || '';
+    if (hiwStepCaption) hiwStepCaption.textContent = `Step ${index + 1} of ${hiwSteps.length}`;
+    updateStoryBar(index);
 
-    const nextSrc = step.dataset.video;
-    const swapSource = nextSrc && hiwVideoSource.getAttribute('src') !== nextSrc;
-
-    if (changed && hiwVideoWrap) {
-      hiwVideoWrap.classList.add('is-switching');
-      setTimeout(() => hiwVideoWrap.classList.remove('is-switching'), SWITCH_ANIM_MS);
-    }
-
-    if (swapSource) {
-      hiwVideoSource.setAttribute('src', nextSrc);
-      hiwVideo.load();
-    }
-    if (!isPaused) hiwVideo.play().catch(() => {});
-
+    if (hiwModal && !hiwModal.hidden) syncModalContent();
     if (opts.userInitiated) restartAutoRotate();
   }
 
   hiwSteps.forEach((step, i) => {
     step.addEventListener('click', () => setActiveStep(i, { userInitiated: true }));
   });
+  hiwStorySegs.forEach((seg, i) => {
+    seg.addEventListener('click', () => setActiveStep(i, { userInitiated: true }));
+  });
 
   if (hiwPlayBtn) hiwPlayBtn.addEventListener('click', () => setPausedState(!isPaused));
   if (hiwPlayOverlay) hiwPlayOverlay.addEventListener('click', () => setPausedState(!isPaused));
 
-  if (hiwFullscreenBtn) {
-    hiwFullscreenBtn.addEventListener('click', () => {
-      const target = hiwVideoWrap || hiwVideo;
-      if (target.requestFullscreen) target.requestFullscreen();
-      else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
-    });
+  function syncModalContent() {
+    if (!hiwModalStage) return;
+    hiwModalStage.innerHTML = '';
+    const clone = hiwScenes[activeIndex].cloneNode(true);
+    clone.classList.add('active');
+    hiwModalStage.appendChild(clone);
+    if (!isPaused) scenePlayState(clone, false);
+    if (hiwModalLabel) hiwModalLabel.textContent = hiwSteps[activeIndex].dataset.label || '';
   }
 
-  hiwVideo.addEventListener('timeupdate', () => {
-    if (!hiwVideo.duration || !hiwProgressFill || !hiwTime) return;
-    hiwProgressFill.style.width = `${(hiwVideo.currentTime / hiwVideo.duration) * 100}%`;
-    hiwTime.textContent = `${hiwFormatTime(hiwVideo.currentTime)} / ${hiwFormatTime(hiwVideo.duration)}`;
-  });
-  hiwVideo.addEventListener('loadedmetadata', () => {
-    if (hiwTime) hiwTime.textContent = `0:00 / ${hiwFormatTime(hiwVideo.duration)}`;
-  });
+  function onModalKeydown(e) {
+    if (e.key === 'Escape') closeModal();
+  }
 
+  function openModal() {
+    if (!hiwModal) return;
+    lastFocused = document.activeElement;
+    syncModalContent();
+    hiwModal.classList.toggle('is-paused', isPaused);
+    hiwModal.hidden = false;
+    document.body.classList.add('hiw-modal-open');
+    if (autoRotateTimer) clearInterval(autoRotateTimer);
+    if (hiwModalClose) hiwModalClose.focus();
+    document.addEventListener('keydown', onModalKeydown);
+  }
+
+  function closeModal() {
+    if (!hiwModal || hiwModal.hidden) return;
+    hiwModal.hidden = true;
+    document.body.classList.remove('hiw-modal-open');
+    if (hiwModalStage) hiwModalStage.innerHTML = '';
+    document.removeEventListener('keydown', onModalKeydown);
+    if (!isPaused) restartAutoRotate();
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  if (hiwExpandBtn) hiwExpandBtn.addEventListener('click', openModal);
+  if (hiwModalClose) hiwModalClose.addEventListener('click', closeModal);
+  if (hiwModalBackdrop) hiwModalBackdrop.addEventListener('click', closeModal);
+
+  setActiveStep(0);
   if (isPaused) setPausedState(true);
-  restartAutoRotate();
+  else restartAutoRotate();
 }
 
 const contactForm = document.getElementById('contact-form');
