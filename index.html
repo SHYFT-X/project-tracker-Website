@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <header class="site-header" id="site-header">
@@ -346,7 +346,7 @@
         <div class="hiw-grid reveal">
           <div class="hiw-steps" role="tablist" aria-label="How Project Tracker works">
             <button type="button" class="hiw-step active" role="tab" aria-selected="true" aria-controls="hiwPanel" id="hiwTab-0"
-              data-label="Upload &amp; Organize">
+              data-label="Upload &amp; Organize" data-video="videos/step1-upload.mp4" data-video-fallback="https://assets.mixkit.co/videos/27543/27543-720.mp4">
               <span class="hiw-step-bar" aria-hidden="true"></span>
               <span class="hiw-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M12 15V4M12 4l-4 4M12 4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -364,7 +364,7 @@
               </span>
             </button>
             <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-1"
-              data-label="Pinpoint Video Feedback">
+              data-label="Pinpoint Video Feedback" data-video="videos/step2-feedback.mp4" data-video-fallback="https://assets.mixkit.co/videos/27543/27543-720.mp4">
               <span class="hiw-step-bar" aria-hidden="true"></span>
               <span class="hiw-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -376,7 +376,7 @@
               </span>
             </button>
             <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-2"
-              data-label="1-Click Client Approval">
+              data-label="1-Click Client Approval" data-video="videos/step3-approval.mp4" data-video-fallback="https://assets.mixkit.co/videos/27543/27543-720.mp4">
               <span class="hiw-step-bar" aria-hidden="true"></span>
               <span class="hiw-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/></svg>
@@ -388,7 +388,7 @@
               </span>
             </button>
             <button type="button" class="hiw-step" role="tab" aria-selected="false" aria-controls="hiwPanel" id="hiwTab-3"
-              data-label="Real-Time Team Sync">
+              data-label="Real-Time Team Sync" data-video="videos/step4-sync.mp4" data-video-fallback="https://assets.mixkit.co/videos/27543/27543-720.mp4">
               <span class="hiw-step-bar" aria-hidden="true"></span>
               <span class="hiw-step-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18 4v4h-4M6 20v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -420,119 +420,9 @@
               </div>
 
               <div class="hiw-stage" id="hiwStage">
-                <div class="hiw-scene hiw-scene-upload active" data-scene="0" aria-hidden="true">
-                  <div class="hiw-upload-zone">
-                    <span class="hiw-upload-cloud" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" width="28" height="28"><path d="M7 18a4 4 0 01-1-7.87A5 5 0 0115.9 8H16a4.5 4.5 0 010 9H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 11v7M12 11l-2.5 2.5M12 11l2.5 2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </span>
-                    <p class="hiw-upload-title">Drop files to upload</p>
-                    <div class="hiw-upload-chips">
-                      <span>🎥 MP4/Videos</span>
-                      <span>📄 PDF Brochures</span>
-                      <span>🖼️ Flyers</span>
-                      <span>🎨 Design Files</span>
-                    </div>
-                  </div>
-                  <div class="hiw-upload-list">
-                    <div class="hiw-upload-item">
-                      <span class="hiw-file-icon">🎥</span>
-                      <div class="hiw-file-meta">
-                        <strong>Homepage_Hero_v3.mp4</strong>
-                        <div class="hiw-file-bar"><div class="hiw-file-bar-fill fill-anim"></div></div>
-                      </div>
-                      <span class="hiw-file-status">
-                        <span class="st-uploading">82%</span>
-                        <span class="st-done">✓</span>
-                      </span>
-                    </div>
-                    <div class="hiw-upload-item item-fade">
-                      <span class="hiw-file-icon">📄</span>
-                      <div class="hiw-file-meta">
-                        <strong>Q3_Brochure.pdf</strong>
-                        <div class="hiw-file-bar"><div class="hiw-file-bar-fill fill-full"></div></div>
-                      </div>
-                      <span class="hiw-file-status"><span class="st-done static">✓</span></span>
-                    </div>
-                  </div>
-                  <div class="hiw-folder-row">
-                    <span class="hiw-folder-chip folder-active">📁 Homepage Redesign</span>
-                    <span class="hiw-folder-chip">📁 Q3 Campaign</span>
-                    <span class="hiw-folder-chip">📁 Brand Assets</span>
-                  </div>
-                </div>
-
-                <div class="hiw-scene hiw-scene-feedback" data-scene="1" aria-hidden="true">
-                  <div class="hiw-fb-video">
-                    <video class="hiw-fb-video-el" muted loop playsinline preload="auto" aria-hidden="true">
-                      <source src="https://assets.mixkit.co/videos/27543/27543-720.mp4" type="video/mp4">
-                    </video>
-                    <span class="hiw-fb-pin" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z" fill="#fbbf24"/><circle cx="12" cy="9.5" r="2.4" fill="#0b0f1c"/></svg>
-                    </span>
-                    <div class="hiw-fb-scrubber"><span class="hiw-fb-scrubber-fill"></span><span class="hiw-fb-scrubber-marker"></span></div>
-                  </div>
-                  <div class="hiw-fb-panel">
-                    <h4>Feedback</h4>
-                    <div class="hiw-fb-input">
-                      <span class="hiw-fb-placeholder">Add a comment at 0:12…</span>
-                      <span class="hiw-fb-typed">Increase logo size here.</span>
-                    </div>
-                    <div class="hiw-fb-comment">
-                      <span class="mock-avatar">DR</span>
-                      <div><strong>Dana R.</strong><p>Increase logo size here.</p></div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="hiw-scene hiw-scene-approval" data-scene="2" aria-hidden="true">
-                  <div class="hiw-approval-card">
-                    <span class="hiw-approval-thumb" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" width="20" height="20"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 15l5-5 4 4 4-5 5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </span>
-                    <div class="hiw-approval-meta">
-                      <strong>Homepage_Hero_v3.mp4</strong>
-                      <span class="hiw-approval-status">
-                        <span class="st-pending">Pending Review</span>
-                        <span class="st-approved">✓ Approved</span>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="hiw-approval-actions">
-                    <span class="hiw-approval-btn approve">Approve</span>
-                    <span class="hiw-approval-btn decline">Request Changes</span>
-                  </div>
-                  <div class="hiw-approval-comment">
-                    <span class="mock-avatar">MT</span>
-                    <div><strong>Marcus T.</strong><p>Looks great — approved!</p></div>
-                  </div>
-                </div>
-
-                <div class="hiw-scene hiw-scene-sync" data-scene="3" aria-hidden="true">
-                  <div class="hiw-sync-toasts">
-                    <div class="hiw-sync-toast toast-1">
-                      <span class="mock-avatar">DR</span>
-                      <div><strong>Dana R.</strong><p>commented on Homepage_Hero_v3</p></div>
-                    </div>
-                    <div class="hiw-sync-toast toast-2">
-                      <span class="mock-avatar">MT</span>
-                      <div><strong>Marcus T.</strong><p>approved v3.0</p></div>
-                    </div>
-                  </div>
-                  <div class="hiw-sync-audit">
-                    <h4>Audit trail</h4>
-                    <ul>
-                      <li class="audit-1"><span class="hiw-audit-dot"></span>v3.0 uploaded<time>10:02 AM</time></li>
-                      <li class="audit-2"><span class="hiw-audit-dot"></span>Dana commented<time>10:05 AM</time></li>
-                      <li class="audit-3"><span class="hiw-audit-dot"></span>Marcus approved<time>10:07 AM</time></li>
-                    </ul>
-                  </div>
-                  <div class="hiw-sync-versions">
-                    <span class="hiw-version-chip">v1.0</span>
-                    <span class="hiw-version-chip">v2.0</span>
-                    <span class="hiw-version-chip active">v3.0</span>
-                  </div>
-                </div>
-
+                <video class="hiw-video" id="hiwVideo" muted loop playsinline preload="auto" aria-hidden="true">
+                  <source id="hiwVideoSource" src="videos/step1-upload.mp4" type="video/mp4">
+                </video>
                 <button type="button" class="hiw-play-overlay" id="hiwPlayOverlay" aria-label="Pause">
                   <svg class="icon-pause" viewBox="0 0 24 24" fill="none" width="22" height="22"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>
                   <svg class="icon-play" viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M7 5v14l12-7z" fill="currentColor"/></svg>
@@ -716,6 +606,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=9"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
