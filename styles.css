@@ -518,7 +518,7 @@ section h2.center { margin-left: auto; margin-right: auto; }
   .review-comment-item { opacity: 1; transform: none; }
   .review-play { display: none; }
 }
-
+  
 /* Section rhythm */
 .section { padding: 5.5rem 1.5rem; }
 .section-alt { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -828,8 +828,64 @@ section h2 { font-size: clamp(1.7rem, 3vw, 2.3rem); letter-spacing: -.01em; marg
 
 /* Scene 2 — Pinpoint Video Feedback */
 .hiw-scene-feedback { flex-direction: row; gap: 1.2rem; }
-.hiw-fb-video { position: relative; flex: 1.3; border-radius: 12px; overflow: hidden; background: #000; min-width: 0; }
-.hiw-fb-video-el { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hiw-fb-video {
+  position: relative;
+  flex: 1.3;
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 0;
+  background:
+    radial-gradient(120% 140% at 12% 10%, rgba(79,70,229,.55), transparent 60%),
+    radial-gradient(120% 140% at 88% 92%, rgba(37,99,235,.5), transparent 55%),
+    linear-gradient(160deg, #1b2140, #05070f);
+}
+.hiw-fb-poster { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.hiw-fb-poster-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.25);
+}
+.hiw-fb-timestamp {
+  position: absolute;
+  top: .6rem;
+  right: .7rem;
+  padding: .15rem .5rem;
+  border-radius: 6px;
+  background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.14);
+  font-size: .68rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--hiw-text);
+}
+.hiw-fb-cursor {
+  position: absolute;
+  left: 82%;
+  top: 85%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  animation: hiwCursorMove 8s ease infinite;
+}
+.hiw-fb-cursor svg { display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); }
+.hiw-fb-cursor-ring {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  transform: translate(-50%, -50%) scale(.3);
+  opacity: 0;
+  animation: hiwCursorClickRing 8s ease infinite;
+}
 .hiw-fb-pin {
   position: absolute;
   left: 42%;
@@ -1054,6 +1110,19 @@ body.hiw-modal-open { overflow: hidden; }
   0%, 13%   { opacity: 0; transform: translate(-50%,-100%) scale(.4); }
   16%, 48%  { opacity: 1; transform: translate(-50%,-100%) scale(1); }
   52%, 100% { opacity: 0; transform: translate(-50%,-100%) scale(.4); }
+}
+@keyframes hiwCursorMove {
+  0%, 4%    { opacity: 0; left: 82%; top: 85%; transform: translate(-50%,-50%) scale(1); }
+  8%, 12%   { opacity: 1; left: 82%; top: 85%; transform: translate(-50%,-50%) scale(1); }
+  16%       { opacity: 1; left: 42%; top: 48%; transform: translate(-50%,-50%) scale(1); }
+  18%       { opacity: 1; left: 42%; top: 48%; transform: translate(-50%,-50%) scale(.8); }
+  22%, 29%  { opacity: 1; left: 42%; top: 48%; transform: translate(-50%,-50%) scale(1); }
+  34%, 100% { opacity: 0; left: 42%; top: 48%; transform: translate(-50%,-50%) scale(1); }
+}
+@keyframes hiwCursorClickRing {
+  0%, 17%   { opacity: 0; transform: translate(-50%,-50%) scale(.3); }
+  18%       { opacity: .7; transform: translate(-50%,-50%) scale(.3); }
+  27%, 100% { opacity: 0; transform: translate(-50%,-50%) scale(1.8); }
 }
 @keyframes hiwToastIn1 {
   0%, 8%    { opacity: 0; transform: translateX(14px); }
